@@ -45,7 +45,7 @@ class MessagesController extends ControllerBase {
                 }
 
                 else {
-                    echo  "error";
+                    echo $message->getMessages();
                 }
                 $messageDownload = new downloadedmessages();
                 $messageDownload->messageID = $message->id;
