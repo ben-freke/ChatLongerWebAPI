@@ -44,13 +44,13 @@ class MessagesController extends ControllerBase {
                     echo (json_encode($array));
                 }
 
+                else {
+                    echo ($message->getMessages());
+                }
                 $messageDownload = new downloadedmessages();
                 $messageDownload->messageID = $message->id;
                 $messageDownload->userID = $user->id;
                 $messageDownload->save();
-
-
-
 
             }
         }
