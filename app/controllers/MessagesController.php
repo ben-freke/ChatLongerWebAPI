@@ -45,7 +45,7 @@ class MessagesController extends ControllerBase {
                 }
 
                 else {
-                    echo ($message->getMessages());
+                    echo  "error";
                 }
                 $messageDownload = new downloadedmessages();
                 $messageDownload->messageID = $message->id;
@@ -207,9 +207,14 @@ class MessagesController extends ControllerBase {
 
         //Set the content type to application/json
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-
-        //Execute the request
         $result = curl_exec($ch);
+        //Execute the request
+        if ($result != null){
+            echo $result;
+        } else {
+            else echo "error";
+        }
+
 
     }
 
