@@ -183,7 +183,7 @@ class MessagesController extends ControllerBase {
     public function testSendAction(){
 
         //API Url
-        $url = 'http://localhost:8181/messages/send';
+        $url = '/messages/send';
 
         //Initiate cURL.
         $ch = curl_init($url);
@@ -216,7 +216,7 @@ class MessagesController extends ControllerBase {
     public function testReceiveAction(){
         $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
         //API Url
-        $url = 'http://localhost:8181/messages/receive';
+        $url = '/messages/send';
 
         //Initiate cURL.
         $ch = curl_init($url);
