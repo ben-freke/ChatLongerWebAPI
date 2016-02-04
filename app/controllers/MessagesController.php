@@ -212,7 +212,7 @@ class MessagesController extends ControllerBase {
         if ($result != null){
             echo $result;
         } else {
-            else echo "error";
+            echo "error";
         }
 
 
