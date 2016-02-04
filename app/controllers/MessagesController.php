@@ -180,7 +180,7 @@ class MessagesController extends ControllerBase {
 
     }
 
-    public function testSendAction($sender, $receiver, $message, $apKey){
+    public function testSendAction($message){
 
         //API Url
         $url = 'http://comms.chatlonger.co.uk/messages/send';
@@ -190,10 +190,10 @@ class MessagesController extends ControllerBase {
 
         //The JSON data.
         $jsonData = array(
-            'userid' => $sender,
-            'user_api_key' => $apKey,
-            'recipient' => $receiver,
-            'message' => $message
+            'userid' => 2,
+            'user_api_key' => "VzMk8S89UfBDJnqYJFxxtVGIH7FZVin4ZOq4MZcz2qcPsaLYv865cKuA67HuRa4b",
+            'recipient' => 1,
+            'message' => "hello"
         );
 
         //Encode the array into JSON.
