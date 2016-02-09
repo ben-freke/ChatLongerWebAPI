@@ -39,7 +39,7 @@ class UsersController extends ControllerBase {
     public function testGetAction(){
         $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
         //API Url
-        $url = 'http://localhost:8181/users/get';
+        $url = 'http://localhost:8181/messages/conversation';
 
         //Initiate cURL.
         $ch = curl_init($url);

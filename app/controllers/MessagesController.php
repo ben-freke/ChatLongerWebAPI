@@ -115,6 +115,39 @@ class MessagesController extends ControllerBase {
         }
     }
 
+    public function conversationAction(){
+        $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
+        $request = new \Phalcon\Http\Request();
+        if ($request->isPost()){
+            //The request is post, therefore it is receiving data
+            //Data is in JSON format
+            $data = json_decode(file_get_contents('php://input'), true);
+            //print_r($data);
+            $user = users::findFirst(array(
+                "conditions" => 'id = :idVal: and apiKey = :keyVal:',
+                'bind' => array('idVal' => $data['userid'], 'keyVal' => $data['user_api_key'])
+            ));
+            $recipient = users::findFirst(array(
+                "conditions" => 'email = :emailVal:',
+                'bind' => array('emailVal' => $data['email'])
+            ));
+
+            $conversation = new conversations();
+            $conversation->user1 = $user->id;
+            $conversation->user2 = $recipient->id;
+
+            if ($user && $recipient && $conversation->save()){
+                $data = array();
+                $data['id'] = $conversation->id;
+                $data['user1'] = $conversation->user1;
+                $data['user2'] = $conversation->user2;
+                $data['name'] = $recipient->name;
+                echo (json_encode($data));
+            }
+
+        }
+    }
+
     public function getUserAction(){
 
         $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
