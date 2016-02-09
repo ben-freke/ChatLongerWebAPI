@@ -40,6 +40,7 @@ class MessagesController extends ControllerBase {
                     $data['receiver'] = $message->receiver;
                     $data['content'] = $message->content;
                     $data['timestamp'] = $message->timestamp;
+
                     $array = $data;
                     echo (json_encode($array));
                 }
@@ -180,7 +181,7 @@ class MessagesController extends ControllerBase {
 
     }
 
-    public function testSendAction($message){
+    public function testSendAction(){
 
         //API Url
         $url = 'http://comms.chatlonger.co.uk/messages/send';
@@ -190,9 +191,9 @@ class MessagesController extends ControllerBase {
 
         //The JSON data.
         $jsonData = array(
-            'userid' => 2,
-            'user_api_key' => "VzMk8S89UfBDJnqYJFxxtVGIH7FZVin4ZOq4MZcz2qcPsaLYv865cKuA67HuRa4b",
-            'recipient' => 1,
+            'userid' => 1,
+            'user_api_key' => "5UNI8bY960GN078yaEi4x0Xg3Fu113v4Jyx6491U715ky4p7054f0328r372636P",
+            'recipient' => 2,
             'message' => "hello"
         );
 
@@ -221,15 +222,15 @@ class MessagesController extends ControllerBase {
     public function testReceiveAction(){
         $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
         //API Url
-        $url = 'http://comms.chatlonger.co.uk/messages/send';
+        $url = 'http://comms.chatlonger.co.uk/messages/receive';
 
         //Initiate cURL.
         $ch = curl_init($url);
 
         //The JSON data.
         $jsonData = array(
-            'userid' => 2,
-            'user_api_key' => 'VzMk8S89UfBDJnqYJFxxtVGIH7FZVin4ZOq4MZcz2qcPsaLYv865cKuA67HuRa4b',
+            'userid' => 1,
+            'user_api_key' => '5UNI8bY960GN078yaEi4x0Xg3Fu113v4Jyx6491U715ky4p7054f0328r372636P',
         );
 
         //Encode the array into JSON.
