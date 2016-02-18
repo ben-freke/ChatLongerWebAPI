@@ -34,4 +34,24 @@ class UsersController extends ControllerBase {
             }
         }
     }
+
+    public function gcmidAction()
+    {
+        $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
+        $request = new \Phalcon\Http\Request();
+        if ($request->isPost()){
+            $data = json_decode(file_get_contents('php://input'), true);
+            $user = users::findFirst(array(
+                "conditions" => 'id = :idVal: and apiKey = :apiVal:',
+                'bind' => array('idVal' => $data['id'], 'apiVal' => $data['api'])
+            ));
+            if ($user){
+                $user->regID = $data['regid'];
+                if ($user->save()) echo json_encode(array("status" => "success"));
+                else echo json_encode(array("status" => "failure", "cause" => "Error saving record"));
+            }
+            else echo json_encode(array("status" => "failure", "cause" => "Authentication Failure"));
+        }
+    }
+
 }
