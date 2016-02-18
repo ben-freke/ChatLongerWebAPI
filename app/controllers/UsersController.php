@@ -35,6 +35,69 @@ class UsersController extends ControllerBase {
         }
     }
 
+    public function testAuthAction(){
+        $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
+        //API Url
+        $url = 'http://comms.chatlonger.co.uk/users/authenticate';
+
+        //Initiate cURL.
+        $ch = curl_init($url);
+
+        //The JSON data.
+        $jsonData = array(
+            'email' => "alex@test.com",
+            'password' => '1234',
+        );
+
+        //Encode the array into JSON.
+        $jsonDataEncoded = json_encode($jsonData);
+
+        //Tell cURL that we want to send a POST request.
+        curl_setopt($ch, CURLOPT_POST, 1);
+
+        //Attach our encoded JSON string to the POST fields.
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+
+        //Set the content type to application/json
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+        //Execute the request
+        echo $result = curl_exec($ch);
+
+    }
+
+    public function testGcmID(){
+        $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
+        //API Url
+        $url = 'http://localhost:8181/users/gcmid';
+
+        //Initiate cURL.
+        $ch = curl_init($url);
+
+        //The JSON data.
+        $jsonData = array(
+            'id' => "3",
+            'api' => '3Ktfm2zog3G406Ix243h3J6ymgt2NRepxM81ZZPhvWubKPRSrKJ8393W52ZV2JRq',
+            'regid' => 'whoop whoop'
+        );
+
+        //Encode the array into JSON.
+        $jsonDataEncoded = json_encode($jsonData);
+
+        //Tell cURL that we want to send a POST request.
+        curl_setopt($ch, CURLOPT_POST, 1);
+
+        //Attach our encoded JSON string to the POST fields.
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+
+        //Set the content type to application/json
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+        //Execute the request
+        echo $result = curl_exec($ch);
+
+    }
+
     public function gcmidAction()
     {
         $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);

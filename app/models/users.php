@@ -9,6 +9,7 @@ class users extends Phalcon\Mvc\Model
     public $emailAddress;
     public $password;
     public $apiKey;
+    public $regID;
 
 
 

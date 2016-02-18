@@ -40,9 +40,10 @@ class MessagesController extends ControllerBase {
                     $data['receiver'] = $message->receiver;
                     $data['content'] = $message->content;
                     $data['timestamp'] = $message->timestamp;
-
                     $array = $data;
+                    $this->sendToGCM($message, $user);
                     echo (json_encode($array));
+
                 }
 
                 else {
@@ -281,6 +282,42 @@ class MessagesController extends ControllerBase {
         //Execute the request
         $result = curl_exec($ch);
 
+    }
+
+    private function sendToGCM(messages $message, users $user)
+    {
+        define( 'API_ACCESS_KEY', self::GCM_API_KEY );
+        $registrationIds = array($user->regID);
+        $msg = array
+        (
+            'id'       => $message->id,
+            'sender'       => $message->sender,
+            'receiver'         => $message->receiver,
+            'message'      => $message->content,
+            'timestamp' => $message->timestamp
+        );
+
+        $fields = array
+        (
+            'registration_ids'  => $registrationIds,
+            'data'              => $msg
+        );
+
+        $headers = array
+        (
+            'Authorization: key=' . API_ACCESS_KEY,
+            'Content-Type: application/json'
+        );
+        $ch = curl_init();
+        curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
+        curl_setopt( $ch,CURLOPT_POST, true );
+        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+        $result = curl_exec($ch );
+        curl_close( $ch );
+        echo $result;
     }
 
 }
