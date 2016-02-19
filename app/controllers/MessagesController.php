@@ -40,7 +40,6 @@ class MessagesController extends ControllerBase {
                     $data['receiver'] = $message->receiver;
                     $data['content'] = $message->content;
                     $data['timestamp'] = $message->timestamp;
-                    $data['type'] = $message->timestamp;
 
                     $array = $data;
                     if ($recipient->regID != 0){
