@@ -40,7 +40,7 @@ class MessagesController extends ControllerBase {
                     $data['receiver'] = $message->receiver;
                     $data['content'] = $message->content;
                     $data['timestamp'] = $message->timestamp;
-                    if ($recipient->regID == 0){
+                    if ($recipient->regID == "NULL"){
                         $data['type'] = "PULL";
                     } else {
                         $this->sendToGCM($message, $recipient);
