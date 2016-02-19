@@ -40,11 +40,11 @@ class MessagesController extends ControllerBase {
                     $data['receiver'] = $message->receiver;
                     $data['content'] = $message->content;
                     $data['timestamp'] = $message->timestamp;
-                    if ($recipient->regID != 0){
+                    if ($recipient->regID == 0){
+                        $data['type'] = "PULL";
+                    } else {
                         $this->sendToGCM($message, $recipient);
                         $data['type'] = "PUSH";
-                    } else {
-                        $data['type'] = "PULL";
                     }
                     $array = $data;
                     echo (json_encode($array));
