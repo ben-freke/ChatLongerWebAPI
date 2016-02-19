@@ -41,7 +41,7 @@ class MessagesController extends ControllerBase {
                     $data['content'] = $message->content;
                     $data['timestamp'] = $message->timestamp;
                     $array = $data;
-                    $this->sendToGCM($message, $recipient);
+                    if ($recipient->regID != 0) $this->sendToGCM($message, $recipient);
                     echo (json_encode($array));
 
                 }
@@ -225,10 +225,10 @@ class MessagesController extends ControllerBase {
 
         //The JSON data.
         $jsonData = array(
-            'userid' => 4,
-            'user_api_key' => "7Qut6Z77DeDF39T06z5730100G109TYHrsF8I134416xR4rE1PP34o776ueX7N5v",
+            'userid' => 1,
+            'user_api_key' => "5UNI8bY960GN078yaEi4x0Xg3Fu113v4Jyx6491U715ky4p7054f0328r372636P",
             'recipient' => 3,
-            'message' => "GCM Push"
+            'message' => "Benjamin Freke"
         );
 
         //Encode the array into JSON.
