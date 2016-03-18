@@ -4,9 +4,8 @@
 class users extends Phalcon\Mvc\Model
 {
     public $id;
-    public $firstName;
-    public $lastName;
-    public $emailAddress;
+    public $name;
+    public $email;
     public $password;
     public $apiKey;
     public $regID;
