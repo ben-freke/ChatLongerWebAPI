@@ -8,17 +8,25 @@
 
 use Phalcon\Mvc\View;
 
+/**
+ * Class MessagesController
+ * Messages controller provides functionality for messages in ChatLonger.
+ */
 
 class MessagesController extends ControllerBase {
+
+    /**
+     * The Send Action: This checks that the HTTP request is post, decodes the JSON expected and then checks
+     * both the sending user's authentication (via their id and apiKey) and then checks the recipient exsits.
+     * Should both of these conditions be true, the method will save the message in the database and return
+     * with the message ID, Sender, Receiver, Content and Timestamp.
+     */
 
     public function sendAction(){
         $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
         $request = new \Phalcon\Http\Request();
         if ($request->isPost()){
-            //The request is post, therefore it is receiving data
-            //Data is in JSON format
             $data = json_decode(file_get_contents('php://input'), true);
-            //print_r($data);
             $user = users::findFirst(array(
                "conditions" => 'id = :idVal: and apiKey = :keyVal:',
                 'bind' => array('idVal' => $data['userid'], 'keyVal' => $data['user_api_key'])
@@ -32,7 +40,6 @@ class MessagesController extends ControllerBase {
                 $message->sender = $user->id;
                 $message->receiver = $recipient->id;
                 $message->content = $data['message'];
-
                 if ($message->save()){
                     $data = array();
                     $data['id'] = $message->id;
@@ -48,9 +55,7 @@ class MessagesController extends ControllerBase {
                     }
                     $array = $data;
                     echo (json_encode($array));
-
                 }
-
                 else {
                     echo $message->getMessages();
                 }
@@ -58,10 +63,15 @@ class MessagesController extends ControllerBase {
                 $messageDownload->messageID = $message->id;
                 $messageDownload->userID = $user->id;
                 $messageDownload->save();
-
             }
         }
     }
+
+    /**
+     * Receive Action: receives a HTTP Post request, in JSON, checks to ensure the client is authenticated
+     * and then responds with an array of JSON objects for each message that has not yet been downloaded from the
+     * server
+     */
 
     public function receiveAction(){
         $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
@@ -121,6 +131,11 @@ class MessagesController extends ControllerBase {
         }
     }
 
+    /**
+     * Conversation Action: creates a new conversation between two users and returns the properties
+     * of the new conversation
+     */
+
     public function conversationAction(){
         $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
         $request = new \Phalcon\Http\Request();
@@ -154,6 +169,10 @@ class MessagesController extends ControllerBase {
         }
     }
 
+    /**
+     * Get User Action: receives a user's email address and responds with the user's full name
+     */
+
     public function getUserAction(){
 
         $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
@@ -183,6 +202,10 @@ class MessagesController extends ControllerBase {
         }
 
     }
+
+    /**
+     * Get User Action: receives a user's email address and responds with the user's full name
+     */
 
     public function getconversationrecipientAction(){
         $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
@@ -220,74 +243,13 @@ class MessagesController extends ControllerBase {
 
     }
 
-    public function testSendAction(){
-
-        //API Url
-        $url = 'http://comms.chatlonger.co.uk/messages/send';
-
-        //Initiate cURL.
-        $ch = curl_init($url);
-
-        //The JSON data.
-        $jsonData = array(
-            'userid' => 1,
-            'user_api_key' => "5UNI8bY960GN078yaEi4x0Xg3Fu113v4Jyx6491U715ky4p7054f0328r372636P",
-            'recipient' => 3,
-            'message' => "Benjamin Freke"
-        );
-
-        //Encode the array into JSON.
-        $jsonDataEncoded = json_encode($jsonData);
-
-        //Tell cURL that we want to send a POST request.
-        curl_setopt($ch, CURLOPT_POST, 1);
-
-        //Attach our encoded JSON string to the POST fields.
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
-
-        //Set the content type to application/json
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $result = curl_exec($ch);
-        //Execute the request
-        if ($result != null){
-            echo $result;
-        } else {
-            echo "error";
-        }
-
-
-    }
-
-    public function testReceiveAction(){
-        $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_NO_RENDER);
-        //API Url
-        $url = 'http://comms.chatlonger.co.uk/messages/receive';
-
-        //Initiate cURL.
-        $ch = curl_init($url);
-
-        //The JSON data.
-        $jsonData = array(
-            'userid' => 4,
-            'user_api_key' => '7Qut6Z77DeDF39T06z5730100G109TYHrsF8I134416xR4rE1PP34o776ueX7N5v',
-        );
-
-        //Encode the array into JSON.
-        $jsonDataEncoded = json_encode($jsonData);
-
-        //Tell cURL that we want to send a POST request.
-        curl_setopt($ch, CURLOPT_POST, 1);
-
-        //Attach our encoded JSON string to the POST fields.
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
-
-        //Set the content type to application/json
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-
-        //Execute the request
-        $result = curl_exec($ch);
-
-    }
+    /**
+     * @param messages $message
+     * @param users $user
+     *
+     * Takes in the destination user and message and sends the relevant data to the Google Cloud Messaging service
+     * for push notifications
+     */
 
     private function sendToGCM(messages $message, users $user)
     {
